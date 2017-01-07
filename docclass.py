@@ -79,13 +79,68 @@ def sample_train(cl):
 
 # ---- t9 ----
 class NaiveBayes(classifier):
+    def docprob(self, item, cat):
+        features = self.get_features(item)
+        # Multiply the probabilities of all the features together
+        p = 1
+        for f in features:
+            p *= self.weightedprob(f, cat, self.fprob)
+        return p
+
     # ---- t13 ----
     def __init__(self, get_features):
-        super(NaiveBayes, self).__init__(get_features)
-        self.thresholds = collections.defaultdict(lambda: 1.0)
+        classifier.__init__(self, get_features)
+        self.thresholds = {}
+        #super(NaiveBayes, self).__init__(get_features)
+        #self.thresholds = collections.defaultdict(lambda: 1.0)
+
+    def setthreshold(self, cat, t):
+        self.thresholds[cat] = t
+
+    def getthreshold(self, cat):
+        if cat not in self.thresholds:
+            return 1.0
+        return self.thresholds[cat]
+
+    # ---- t11 ----
+    def prob(self, item, cat):
+        total = 0
+        for x in self.categories():
+            total += self.cc[x]
+        catprob = self.catcount(cat)/total
+        docprob = self.docprob(item, cat)
+        return catprob * docprob
+
+    # ---- t14 ----
+    def classify(self, item, default=None):
+        probs = {}
+        # Find the category with the highest probability
+        maxim = 0.0
+        best = None
+        for cat in self.categories():
+            probs[cat] = self.docprob(item, cat)
+            if probs[cat] > maxim:
+                next = best
+                maxim = probs[cat]
+                best = cat
+
+        # Make sure the probability exceeds threshold*next best
+        print "Maxim: " + str(maxim)
+        print "best: " + str(best)
+        print "next: " + str(next)
+        if next is None:
+            return best
+        else:
+            for cat in probs:
+                if cat == best:
+                    continue
+                if probs[cat] < self.getthreshold(cat):
+                    return default
+                else:
+                    return best
 
 
-# Falta tarea 10, 11 i 14
+# Falta tarea 14
 '''
 classify(item, default) --> Bayes' Theorem: Maximo A Posteriori (MAP) sin P(D)
 Problema:
