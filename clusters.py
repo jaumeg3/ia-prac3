@@ -18,9 +18,11 @@ def readfile(filename):
 
 
 # ---- t3 ----
-def euclidean(v1, v2):
-    # FALTA COSES
-    return 1 / (1 + distance)
+def euclidean(a, b):
+    ret = reduce(lambda x, y: x + pow((a.coords[y] - b.coords[y]), 2),
+                 range(a.n), 0.0)
+    return sqrt(ret)
+    #return math.sqrt(math.pow((centroidY - dataPointY), 2) + math.pow((centroidX - dataPointX), 2))
 
 
 def pearson(v1, v2):
@@ -110,9 +112,7 @@ def printclust(clust, labels=None, n=0):
 
 # ---- t7 ----
 def rotatematrix(data):
-    newdata = []
-    # ....
-    return newdata
+    return zip(data)
 
 
 def kcluster(rows,distance=pearson,k=4):
