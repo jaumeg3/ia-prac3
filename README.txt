@@ -1,14 +1,18 @@
 Arxiu docclass.py
 
-La tarea 14 del mateix arxiu, no funciona el if. No se que vol dir theshoold*next
+La tarea 14 del no funciona el if.
+No se que quiere decir theshoold*next.
 
 
 Arxiu treepredict.py
 
-Revisa si l'entropia està ben feta.
-El build tree no hi ha manera, perque no se que signifiquen aquelles variables per controlar i no se que ha de fer exactament la funció.
-El build tree iterative falte el buildtree.
+En el build tree hay de averiguar para que sirve el beta.
+El build tree iterative hay que hacer-lo.
+Hay que hacer la tarea 13 i 14 sobre tests.
+La tarea 15 es teorica
+La tarea 16 hace falta hacer-la.
+
 
 Arxiu clusters.py
 
-La tarea 3, la tarea 7?¿?¿ i la tarea 11
+Falta fer la tarea 11. Preguntar si es una pregunta teorica o no.
