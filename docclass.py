@@ -115,29 +115,22 @@ class NaiveBayes(classifier):
     def classify(self, item, default=None):
         probs = {}
         # Find the category with the highest probability
-        maxim = 0.0
+        max = 0.0
         best = None
         for cat in self.categories():
-            probs[cat] = self.docprob(item, cat)
-            if probs[cat] > maxim:
-                next = best
-                maxim = probs[cat]
+            probs[cat] = self.prob(item, cat)
+            if probs[cat] > max:
+                max = probs[cat]
                 best = cat
 
         # Make sure the probability exceeds threshold*next best
-        print "Maxim: " + str(maxim)
+        print "Maxim: " + str(max)
         print "best: " + str(best)
-        print "next: " + str(next)
-        if next is None:
-            return best
-        else:
-            for cat in probs:
-                if cat == best:
-                    continue
-                if probs[cat] < self.getthreshold(cat):
-                    return default
-                else:
-                    return best
+        for cat in probs:
+            if cat == best: continue
+            if max < self.getthreshold(cat):
+                return default
+        return best
 
 
 # Falta tarea 14

@@ -72,6 +72,7 @@ def entropy(rows):
         imp += -(log2 * x/int(len(results)))
     return imp
 
+
 # ---- t8 ----
 class decisionnode:
     def __init__(self, col=-1, value=None, results=None, tb=None, fb=None):
@@ -81,6 +82,7 @@ class decisionnode:
         self.tb = tb
         self.fb = fb
 
+
 # ---- t9 ----
 def buildtree(part, scoref=entropy, beta=0):
     if len(part) == 0: return decisionnode()
@@ -89,14 +91,32 @@ def buildtree(part, scoref=entropy, beta=0):
     best_gain = 0
     best_criteria = None
     best_sets = None
-    if
-        return buildtree(current_score)
+
+    atributes = len(part[0])-1
+
+    for col in range(0, atributes):
+        values = {}
+        for row in part:
+            atributes[row[col]] = 1
+        for value in values.keys():
+            (set1, set2) = divideset(part, col, value)
+            p = float(len(set1))/len(part)
+            gain = current_score-p*scoref(set1)-(1-p)*scoref(set2)
+            if gain > best_gain and len(set1) > 0 and len(set2) > 0:
+                best_gain = gain
+                best_criteria = (col, value)
+                best_sets = (set1, set2)
+    if best_gain > 0:
+        true_branch = buildtree(best_sets[0])
+        false_branch = buildtree(best_sets[1])
+        return decisionnode(col=best_criteria[0], value=best_criteria[1],
+                            tb=true_branch, fb=false_branch)
     else:
-        return decisionnode(-1,None,unique_counts(part), None, None)
+        return decisionnode(-1, None, unique_counts(part), None, None)
 
 
 # ---- t10 ----
-def buildtree_iterative(part, scoref=entropy, beta=0):
+#def buildtree_iterative(part, scoref=entropy, beta=0):
 
 
 # ---- t11 ----
@@ -118,13 +138,22 @@ def classify(obj, tree):
         return tree.results
     else:
         v = obj[tree.col]
-        branch = None
-        if isinstance(v,int) or isinstance(v,float):
-            branch = tree.tb if v>= tree.value else branch=tree.fb
+        if isinstance(v, int) or isinstance(v, float):
+            branch = tree.tb if v >= tree.value else branch=tree.fb
         else:
             branch = tree.tb if v == tree.value else branch = tree.fb
     return classify(obj, branch)
 
+
+# ---- t13 ----
+def test_performance(testset, trainingset):
+    read_file()
+
+# ---- t15 ----
+# Suggest other solutions
+
+# ---- t16 ----
+def prune(tree, threshold):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
