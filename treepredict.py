@@ -114,6 +114,16 @@ def printtree(tree, indent=''):
 
 # ---- t12 ----
 def classify(obj, tree):
+    if tree.results is not None:
+        return tree.results
+    else:
+        v = obj[tree.col]
+        branch = None
+        if isinstance(v,int) or isinstance(v,float):
+            branch = tree.tb if v>= tree.value else branch=tree.fb
+        else:
+            branch = tree.tb if v == tree.value else branch = tree.fb
+    return classify(obj, branch)
 
 
 if __name__ == '__main__':
