@@ -112,7 +112,9 @@ def printclust(clust, labels=None, n=0):
 
 # ---- t7 ----
 def rotatematrix(data):
-    return zip(data)
+    rows = len(data)
+    cols = len(data[0])
+    return [[data[j][i] for j in xrange(rows)] for i in xrange(cols)]
 
 
 def kcluster(rows,distance=pearson,k=4):
