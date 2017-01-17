@@ -114,35 +114,26 @@ class NaiveBayes(classifier):
     # ---- t14 ----
     def classify(self, item, default=None):
         probs = {}
-        # Find the category with the highest probability
         max = 0.0
-        best = None
         for cat in self.categories():
             probs[cat] = self.prob(item, cat)
             if probs[cat] > max:
                 max = probs[cat]
                 best = cat
-
-        # Make sure the probability exceeds threshold*next best
-        print "Maxim: " + str(max)
-        print "best: " + str(best)
         for cat in probs:
             if cat == best: continue
-            if max < self.getthreshold(cat):
+            if probs[cat] * self.getthreshold(best) > probs[best]:
                 return default
         return best
 
-
-# Falta tarea 14
 '''
+Apuntes de clase:
+
 classify(item, default) --> Bayes' Theorem: Maximo A Posteriori (MAP) sin P(D)
 Problema:
 	p(good | item) --> p(good | item) = p(item | good) * (p(good)/p(item)) --> p(item | good)
 
 	Como tenemos que calcular qual es mayor, p(good | item) i p(bad | item), nos ahorramos el p(item)
 	en nuestro caso.
-
-
-THRESHOLDS:
 
 '''

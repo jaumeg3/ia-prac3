@@ -70,7 +70,7 @@ def entropy(rows):
     imp = 0.0
     for r in results.keys():
         p = float(results[r]) / len(rows)
-        imp = imp - p * log2(p)
+        imp -= p * log2(p)
     return imp
 
 
@@ -107,7 +107,7 @@ def buildtree(part, scoref=entropy, beta=0):
                 best_gain = gain
                 best_criteria = (col, value)
                 best_sets = (set1, set2)
-    if best_gain > 0:
+    if best_gain > beta:
         true_branch = buildtree(best_sets[0])
         false_branch = buildtree(best_sets[1])
         return decisionnode(col=best_criteria[0], value=best_criteria[1],
@@ -117,7 +117,14 @@ def buildtree(part, scoref=entropy, beta=0):
 
 
 # ---- t10 ----
-# def buildtree_iterative(part, scoref=entropy, beta=0):
+def buildtree_iterative(part, scoref=entropy, beta=0):
+    if len(part) == 0: return decisionnode()
+    current_score = scoref(part)
+    # Set up some variables to track the best criteria
+    best_gain = 0
+    best_criteria = None
+    best_sets = None
+    attributes = len(part[0]) - 1
 
 
 # ---- t11 ----
@@ -154,7 +161,7 @@ def classify(obj, tree):
 
 # ---- t13 ----
 #def test_performance(testset, trainingset):
-#    read_file()
+
 
 
 # ---- t15 ----

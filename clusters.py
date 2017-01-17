@@ -1,5 +1,6 @@
 import random
 from math import sqrt
+import math
 
 
 def readfile(filename):
@@ -19,10 +20,8 @@ def readfile(filename):
 
 # ---- t3 ----
 def euclidean(a, b):
-    ret = reduce(lambda x, y: x + pow((a.coords[y] - b.coords[y]), 2),
-                 range(a.n), 0.0)
+    ret = sum([math.pow(a[i] - b[i], 2) for i in range(len(a))])
     return sqrt(ret)
-    #return math.sqrt(math.pow((centroidY - dataPointY), 2) + math.pow((centroidX - dataPointX), 2))
 
 
 def pearson(v1, v2):
@@ -96,13 +95,13 @@ def printclust(clust, labels=None, n=0):
     for i in range(n): print '',
     if clust.id < 0:
         # negative id means that this is branch
-        print '-'
+        print ('-')
     else:
         # positive id means that this is an endpoint
         if labels is None:
-            print clust.id
+            print (clust.id)
         else:
-            print labels[clust.id]
+            print (labels[clust.id])
     # now print the right and left branches
     if clust.left is not None:
         printclust(clust.left, labels, n + 1)
@@ -112,9 +111,11 @@ def printclust(clust, labels=None, n=0):
 
 # ---- t7 ----
 def rotatematrix(data):
-    rows = len(data)
-    cols = len(data[0])
-    return [[data[j][i] for j in xrange(rows)] for i in xrange(cols)]
+    newdata = []
+    for i in range(len(data[0])):
+        newrow = [data[j][i] for j in range(len(data))]
+        newdata.append(newrow)
+    return newdata
 
 
 def kcluster(rows,distance=pearson,k=4):
