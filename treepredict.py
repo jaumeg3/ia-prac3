@@ -113,7 +113,7 @@ def buildtree(part, scoref=entropy, beta=0):
         return decisionnode(col=best_criteria[0], value=best_criteria[1],
                             tb=true_branch, fb=false_branch)
     else:
-        return decisionnode(-1, None, unique_counts(part), None, None)
+        return decisionnode(results=unique_counts(part))
 
 
 # ---- t10 ----
@@ -130,17 +130,21 @@ def buildtree_iterative(part, scoref=entropy, beta=0):
 # ---- t11 ----
 def printtree(tree, indent=''):
     # Is this a leaf node?
-    if tree.results is not None:
-        print(str(tree.results))
+
+    if tree.results != None:
+        print str(tree.results)
     else:
         # Print the criteria
-        print(str(tree.col) + ':' + str(tree.value) + '? ')
+        print str(tree.col) + ':' + str(tree.value) + '? '
+
         # Print the branches
-        print(indent + 'T->', printtree(tree.tb, indent + ' '))
-        print(indent + 'F->', printtree(tree.fb, indent + ' '))
+        print indent + 'T->',
+        printtree(tree.tb, indent + ' ')
+        print indent + 'F->',
+        printtree(tree.fb, indent + ' ')
 
 
-#---- t12 ----
+# ---- t12 ----
 def classify(obj, tree):
     if tree.results is not None:
         return tree.results
@@ -160,7 +164,7 @@ def classify(obj, tree):
 
 
 # ---- t13 ----
-#def test_performance(testset, trainingset):
+def test_performance(testset, trainingset):
 
 
 
@@ -190,25 +194,32 @@ def prune(tree, threshold):
 
 
 if __name__ == '__main__':
+
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('prototypes_file', type=str, help="hola que tal")
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        description="---- DESCRIPTION HERE ----",
+        epilog="---- EPILOG HERE ----")
+
+    parser.add_argument('prototypes_file', type=argparse.FileType('r'),
+                        help="File filled with prototypes (one per line)")
+
     parser.add_argument('-ifl', '--ignore_first_line', action='store_true',
-                        help='Soy un flag')
-    parser.add_argument('-ds', '--data-sep', required=False, default=',',
-                        help="")
-    opts = parser.parse_args()
-    data = read_file(opts.prototypes_file, data_sep=opts.data_sep,
-                     ignore_first_line=opts.ignore_first_line)
+                        help="Ignores the first line of the prototypes file")
 
-    sett, setf = divideset(data, 3, 20)
-    print("Gini True:", gini_impurity(sett))
-    print("Gini False:", gini_impurity(setf))
-    protos = read_file(opts.prototypes_file, opts.data_sep)
+    parser.add_argument('-ds', '--data_sep', required=False, default=',',
+                        help="Prototypes data fields separation mark")
+
+    parser.add_argument('-s', '--seed', default=int(time.time()), type=int,
+                        help="Random number generator seed.")
+
+    options = parser.parse_args()
+
+    # Example code
+    protos = read_stream(options.prototypes_file, options.data_sep)
     for p in protos:
-        print(p)
-    print(unique_counts(protos))
-    tree = buildtree(protos)
+        print p
 
-    print(" ")
+    print unique_counts(protos)
+    tree = buildtree(protos)
+    print (" ")
     printtree(tree)

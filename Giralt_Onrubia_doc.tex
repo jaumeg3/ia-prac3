@@ -1,0 +1,72 @@
+\documentclass[11pt]{article}
+\usepackage{ragged2e}
+\usepackage[utf8]{inputenc}
+\usepackage[catalan]{babel}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{afterpage}
+\usepackage{listings}
+\usepackage{standalone}
+\usepackage{caption}
+\graphicspath{ {Images/} }
+
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+
+\begin{document}
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+%----------------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE Universitat de Lleida}\\[1cm] % Name of your university/college
+\includegraphics[scale=0.75]{Images/eps.png}\\[0.65cm] % Include a department/university logo - this will require the graphicx package
+\textsc{\Large Grau en Enginyeria Informàtica}\\[0.3cm] % Major heading such as course name
+\textsc{\large Intel·ligència Artificial}\\[0.5cm] % Minor heading such as course title
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm]
+{\huge \bfseries Tercera pràctica d'Intel·ligència Artificial}\\[0.0cm]
+% Title of your document
+\HRule \\[1cm] 
+
+%----------------------------------------------------------------------------------------
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Autors:}\\
+Jaume Giralt Barbé\\
+Jordi Onrubia Palacios\\
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Professor:} \\
+Josep Pon Farreny
+% Supervisor's Name
+\end{flushright}
+\end{minipage}\\[4cm]
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+{\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+\vfill % Fill the rest of the page with whitespace
+\end{titlepage}
+\newpage
+\tableofcontents
+\listoftables
+\listoffigures
+\clearpage
+\newpage
+\justify
+\section{Implementació de Algorismes}
+
+\end{document}
