@@ -1,8 +1,7 @@
 import argparse
-import collections
 import itertools
-import sys
 import time
+import Stack
 
 
 def read_file(file_path, data_sep=' ', ignore_first_line=False):
@@ -107,6 +106,7 @@ def buildtree(part, scoref=entropy, beta=0):
                 best_gain = gain
                 best_criteria = (col, value)
                 best_sets = (set1, set2)
+
     if best_gain > beta:
         true_branch = buildtree(best_sets[0])
         false_branch = buildtree(best_sets[1])
@@ -117,14 +117,44 @@ def buildtree(part, scoref=entropy, beta=0):
 
 
 # ---- t10 ----
-def buildtree_iterative(part, scoref=entropy, beta=0):
-    if len(part) == 0: return decisionnode()
-    current_score = scoref(part)
-    # Set up some variables to track the best criteria
-    best_gain = 0
-    best_criteria = None
-    best_sets = None
-    attributes = len(part[0]) - 1
+def build_tree_iterative(part, scoref=entropy, beta=0):
+    node = decisionnode()
+    warehouse = Stack.Stack()
+
+    warehouse.push(part, node)
+
+    while warehouse.isEmpty() is False:
+        column, parent = warehouse.pop()
+        current_score = scoref(column)
+        best_gain = 0
+        best_criteria = None
+        best_sets = None
+
+        attributes = len(column[0]) - 1
+        for col in range(0, attributes):
+            values = {}
+            for row in column:
+                values[row[col]] = 1
+            for value in values.keys():
+                (set1, set2) = divideset(column, col, value)
+                p = float(len(set1)) / len(column)
+                gain = current_score - p*scoref(set1) - (1 - p)*scoref(set2)
+                if gain > best_gain and len(set1) > 0 and len(set2) > 0:
+                    best_gain = gain
+                    best_criteria = value
+                    best_sets = (set1, set2)
+                    best_col = col
+
+        if best_gain > beta:
+            parent.tb = decisionnode()
+            parent.fb = decisionnode()
+            parent.value = best_criteria
+            parent.col = best_col
+            warehouse.push(best_sets[0], parent.tb)
+            warehouse.push(best_sets[1], parent.fb)
+        else:
+            parent.results = unique_counts(column)
+    return node
 
 
 # ---- t11 ----
@@ -165,11 +195,16 @@ def classify(obj, tree):
 
 # ---- t13 ----
 def test_performance(testset, trainingset):
-
+    buildtree(testset)
 
 
 # ---- t15 ----
-# Suggest other solutions
+"""
+Another solution that we can do is:
+    - Discard instances: Simply discarding instances with missing values.
+    -
+"""
+
 
 # ---- t16 ----
 def prune(tree, threshold):
@@ -194,7 +229,6 @@ def prune(tree, threshold):
 
 
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description="---- DESCRIPTION HERE ----",
@@ -215,11 +249,13 @@ if __name__ == '__main__':
     options = parser.parse_args()
 
     # Example code
-    protos = read_stream(options.prototypes_file, options.data_sep)
-    for p in protos:
-        print p
-
+    protos = read_stream(options.prototypes_file, options.data_sep,
+                         options.ignore_first_line)
     print unique_counts(protos)
     tree = buildtree(protos)
+    tree2 = build_tree_iterative(protos)
     print (" ")
+    # test_performance(testset, protos)
     printtree(tree)
+    print (" ")
+    printtree(tree2)
