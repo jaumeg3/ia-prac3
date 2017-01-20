@@ -5,6 +5,6 @@
 \contentsline {section}{\numberline {2}Decisions de disseny}{3}
 \contentsline {subsection}{\numberline {2.1}Tree Predict}{3}
 \contentsline {subsection}{\numberline {2.2}Bayesian Learning}{3}
-\contentsline {subsection}{\numberline {2.3}K-Means Cluster}{3}
-\contentsline {section}{\numberline {3}Avaluaci\IeC {\'o} Experimental}{3}
-\contentsline {section}{\numberline {4}Conclusions}{4}
+\contentsline {subsection}{\numberline {2.3}K-Means Cluster}{4}
+\contentsline {section}{\numberline {3}Avaluaci\IeC {\'o} Experimental}{4}
+\contentsline {section}{\numberline {4}Conclusions}{5}
