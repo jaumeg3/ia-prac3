@@ -1,6 +1,6 @@
 File docclass.py
 
-Revisar
+Fine
 
 
 File treepredict.py

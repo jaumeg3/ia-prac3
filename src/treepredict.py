@@ -205,7 +205,7 @@ def test_performance(testset, trainingset):
         result = classify(x, trained)
         if result.get(str(x[-1])) is not None:
             good += 1.0
-    return str(good/len(testset)*100) + "%"
+    return str(good/len(testset)*100)
 
 
 # ---- t15 ----
@@ -278,8 +278,8 @@ if __name__ == '__main__':
     data = read_stream(options.prototypes_file, options.data_sep, options.ignore_first_line)
     tree = buildtree(data)
     #tree2 = build_tree_iterative(data)
-    print (" ")
-    printtree(tree)
+    #print (" ")
+    #printtree(tree)
     #print (" ")
     #printtree(tree2)
     training_set, test_set = create_sets(options.percentage)
