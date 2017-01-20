@@ -1,6 +1,9 @@
 import argparse
 import itertools
+import random
+import sys
 import time
+
 import Stack
 
 
@@ -129,6 +132,7 @@ def build_tree_iterative(part, scoref=entropy, beta=0):
         best_gain = 0
         best_criteria = None
         best_sets = None
+        best_col = -1
 
         attributes = len(column[0]) - 1
         for col in range(0, attributes):
@@ -138,7 +142,7 @@ def build_tree_iterative(part, scoref=entropy, beta=0):
             for value in values.keys():
                 (set1, set2) = divideset(column, col, value)
                 p = float(len(set1)) / len(column)
-                gain = current_score - p*scoref(set1) - (1 - p)*scoref(set2)
+                gain = current_score - p * scoref(set1) - (1 - p) * scoref(set2)
                 if gain > best_gain and len(set1) > 0 and len(set2) > 0:
                     best_gain = gain
                     best_criteria = value
@@ -195,7 +199,13 @@ def classify(obj, tree):
 
 # ---- t13 ----
 def test_performance(testset, trainingset):
-    buildtree(testset)
+    trained = buildtree(trainingset)
+    good = 0.0
+    for x in testset:
+        result = classify(x, trained)
+        if result.get(str(x[-1])) is not None:
+            good += 1.0
+    return str(good/len(testset)*100) + "%"
 
 
 # ---- t15 ----
@@ -228,6 +238,19 @@ def prune(tree, threshold):
             tree.results = unique_counts(tb + fb)
 
 
+# -- Auxiliary Functions --
+
+def create_sets(tan):
+    if not 0.0 < tan < 1.0:
+        print "Error: The percentage must be a number between 0.0 and 1.0"
+        sys.exit(-1)
+    else:
+        random.seed(options.seed)
+        random.shuffle(data)
+        percentage = int(len(data)*tan)
+        return data[:percentage], data[percentage:]
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -246,16 +269,19 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--seed', default=int(time.time()), type=int,
                         help="Random number generator seed.")
 
+    parser.add_argument('-p', '--percentage', default=0.75, type=float,
+                        help="Percentage of Training Test sets.")
+
     options = parser.parse_args()
 
     # Example code
-    protos = read_stream(options.prototypes_file, options.data_sep,
-                         options.ignore_first_line)
-    print unique_counts(protos)
-    tree = buildtree(protos)
-    tree2 = build_tree_iterative(protos)
+    data = read_stream(options.prototypes_file, options.data_sep, options.ignore_first_line)
+    tree = buildtree(data)
+    #tree2 = build_tree_iterative(data)
     print (" ")
-    # test_performance(testset, protos)
     printtree(tree)
-    print (" ")
-    printtree(tree2)
+    #print (" ")
+    #printtree(tree2)
+    training_set, test_set = create_sets(options.percentage)
+    print test_performance(test_set, training_set)
+
