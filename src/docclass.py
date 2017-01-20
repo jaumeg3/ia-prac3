@@ -1,9 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import collections
 import re
-# import math
 
 
 # ---- t1 ----

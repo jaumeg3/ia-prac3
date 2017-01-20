@@ -158,3 +158,4 @@ def kcluster(rows,distance=pearson,k=4):
         return bestmatches
 
 # ---- t11 ----
+# Restarting Policies
